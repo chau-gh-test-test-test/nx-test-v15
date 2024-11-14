@@ -5,7 +5,9 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "YTc2ZmE0MjEtMDRmMi00ZWY5LWI5ZGItNTE3MDViNmFlNDEwfHJlYWQtd3JpdGU=",
+        "nxCloudUrl": "https://staging.nx.app"
       }
     }
   },
@@ -14,12 +16,8 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "e2e": {
-      "inputs": ["default", "^production"]
-    },
-    "test": {
-      "inputs": ["default", "^production"]
-    },
+    "e2e": { "inputs": ["default", "^production"] },
+    "test": { "inputs": ["default", "^production"] },
     "lint": {
       "inputs": [
         "default",
@@ -46,13 +44,8 @@
         "bundler": "vite",
         "babel": true
       },
-      "component": {
-        "style": "css"
-      },
-      "library": {
-        "style": "css",
-        "linter": "eslint"
-      }
+      "component": { "style": "css" },
+      "library": { "style": "css", "linter": "eslint" }
     }
   }
 }
