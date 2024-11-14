@@ -3,21 +3,41 @@
   "npmScope": "nx-test-v15",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"],
-        "accessToken": "YTc2ZmE0MjEtMDRmMi00ZWY5LWI5ZGItNTE3MDViNmFlNDEwfHJlYWQtd3JpdGU=",
-        "nxCloudUrl": "https://staging.nx.app"
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e"
+        ],
+        "nxCloudUrl": "https://staging.nx.app",
+        "nxCloudId": "673656989ce14f80006a6c8b"
       }
     }
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     },
-    "e2e": { "inputs": ["default", "^production"] },
-    "test": { "inputs": ["default", "^production"] },
+    "e2e": {
+      "inputs": [
+        "default",
+        "^production"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^production"
+      ]
+    },
     "lint": {
       "inputs": [
         "default",
@@ -27,7 +47,10 @@
     }
   },
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
@@ -44,8 +67,13 @@
         "bundler": "vite",
         "babel": true
       },
-      "component": { "style": "css" },
-      "library": { "style": "css", "linter": "eslint" }
+      "component": {
+        "style": "css"
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
     }
   }
 }
