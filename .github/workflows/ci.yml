@@ -8,6 +8,7 @@ on:
 
 env:
   NX_VERBOSE_LOGGING: true
+  NX_CLOUD_API: https://staging.nx.app
 
 jobs:
   main:
