@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@nx-test-v15/button": ["libs/button/src/index.ts"],
+      "@nx-test-v15/tooltip": ["libs/tooltip/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
