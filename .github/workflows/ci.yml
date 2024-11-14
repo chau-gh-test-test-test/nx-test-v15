@@ -12,6 +12,7 @@ permissions:
 
 env:
   NX_VERBOSE_LOGGING: true
+  NX_CLOUD_API: https://staging.nx.app
 
 jobs:
   main:
@@ -33,7 +34,7 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - run: npm ci --legacy-peer-deps
+      - run: npm ci
       - run: npx playwright install --with-deps
       - uses: nrwl/nx-set-shas@v4
 
