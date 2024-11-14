@@ -3,7 +3,7 @@
   "npmScope": "nx-test-v15",
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "YTc2ZmE0MjEtMDRmMi00ZWY5LWI5ZGItNTE3MDViNmFlNDEwfHJlYWQtd3JpdGU=",
