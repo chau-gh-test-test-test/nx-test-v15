@@ -6,28 +6,61 @@ on:
       - main
   pull_request:
 
-env:
-  NX_VERBOSE_LOGGING: true
-  NX_CLOUD_API: https://staging.nx.app
+permissions:
+  actions: read
+  contents: read
 
 jobs:
   main:
-    name: Nx Cloud - Main Job
-    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.15.0
-    with:
-      main-branch-name: main
-      number-of-agents: 3
-      init-commands: |
-        NX_VERBOSE_LOGGING=true npx nx-cloud start-ci-run --distribute-on="manual" --stop-agents-after="build"
-      parallel-commands: |
-        NX_VERBOSE_LOGGING=true npx nx-cloud record -- npx nx format:check
-      parallel-commands-on-agents: |
-        NX_VERBOSE_LOGGING=true npx nx affected --target=lint --parallel=3
-        NX_VERBOSE_LOGGING=true npx nx affected --target=test --parallel=3 --ci --code-coverage
-        NX_VERBOSE_LOGGING=true npx nx affected --target=build --parallel=3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  agents:
-    name: Nx Cloud - Agents
-    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.15.0
-    with:
-      number-of-agents: 3
+      # This enables task distribution via Nx Cloud
+      # Run this command as early as possible, before dependencies are installed
+      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
+      # Connect your workspace by running "nx connect" and uncomment this line to enable task distribution
+      - run: npx nx-cloud start-ci-run --distribute-on="manual" --stop-agents-after="e2e-ci"
+
+      # Cache node_modules
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci --legacy-peer-deps
+      - run: npx playwright install --with-deps
+      - uses: nrwl/nx-set-shas@v4
+
+      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
+      # - run: npx nx-cloud record -- echo Hello World
+      # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
+      # When you enable task distribution, run the e2e-ci task instead of e2e
+      - run: NX_VERBOSE_LOGGING=true npx nx affected -t lint test build e2e
+
+agents:
+    name: Agent ${{ matrix.agent }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Add more agents here as your repository expands
+        agent: [1, 2, 3]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Cache node_modules
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Nx Agent ${{ matrix.agent }}
+        run: npx nx-cloud start-agent
+        env:
+          NX_AGENT_NAME: ${{ matrix.agent }}
